@@ -1,1 +1,1966 @@
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>システム要件書: Regrow & Silvera 統合連携開発</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-bottom: 4px solid #34495e;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .header .metadata {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            margin: 25px 0 15px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .section h4 {
+            color: #7f8c8d;
+            margin: 20px 0 10px 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .section p {
+            margin-bottom: 15px;
+            text-align: justify;
+            color: #555;
+        }
+        
+        .section ul, .section ol {
+            margin: 15px 0 15px 30px;
+            color: #555;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .highlight-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 20px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .code-block.json {
+            background: #1e3d59;
+        }
+        
+        .code-block.python {
+            background: #2d5016;
+        }
+        
+        .code-block.sql {
+            background: #4a0e4e;
+        }
+        
+        .api-endpoint {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            font-family: monospace;
+        }
+        
+        .mermaid-container {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            overflow: visible;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .mermaid {
+            width: 100% !important;
+            height: auto !important;
+        }
+        
+        .mermaid svg {
+            max-width: 100% !important;
+            height: auto !important;
+            width: 100% !important;
+        }
+        
+        /* シーケンス図のスタイル */
+        .sequence-diagram {
+            overflow-x: auto;
+        }
+        
+        .sequence-diagram .mermaid svg {
+            min-width: 800px;
+            width: auto !important;
+            max-width: none !important;
+        }
+        
+        /* フロー図のスタイル */
+        .flow-diagram .mermaid svg {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>システム要件書: Regrow & Silvera 統合連携開発</h1>
+            <div class="subtitle">農業カーボンクレジット・プラットフォーム 技術仕様</div>
+            <div class="metadata">
+                <strong>発行日:</strong> 2025年9月6日 | 
+                <strong>対象システム:</strong> Agreen海外PF (Python 3.12 + Chalice + PostgreSQL 17.4) | 
+                <strong>データソース:</strong> 2025年9月2日更新データ定義
+            </div>
+        </header>
+        
+        <main class="content">
+            <section class="section">
+                <h2>1. システム概要</h2>
+                
+                <h3>1.1 目的</h3>
+                <p>既存のAgreen海外PFシステムにRegrow（科学的炭素計算）とSilvera（信用評価）を統合し、農業カーボンクレジット創出から投資マッチングまでを自動化するフルスタック・プラットフォームを構築する。</p>
+                
+                <h3>1.2 現行システム構成</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>レイヤー</th>
+                            <th>技術スタック</th>
+                            <th>詳細</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>フロントエンド</td>
+                            <td>Flutter Web</td>
+                            <td>農家向けWebアプリケーション</td>
+                        </tr>
+                        <tr>
+                            <td>モバイルアプリ</td>
+                            <td>Flutter</td>
+                            <td>iOS/Android対応農家アプリ</td>
+                        </tr>
+                        <tr>
+                            <td>API</td>
+                            <td>Python 3.12 + Chalice</td>
+                            <td>RESTful API、AWS Lambda上で稼働</td>
+                        </tr>
+                        <tr>
+                            <td>認証</td>
+                            <td>AWS Cognito</td>
+                            <td>ユーザー認証・権限管理</td>
+                        </tr>
+                        <tr>
+                            <td>データベース</td>
+                            <td>PostgreSQL 17.4</td>
+                            <td>AWS RDS + RDS Proxy</td>
+                        </tr>
+                        <tr>
+                            <td>ファイルストレージ</td>
+                            <td>AWS S3</td>
+                            <td>画像・ドキュメント保管</td>
+                        </tr>
+                        <tr>
+                            <td>CDN</td>
+                            <td>AWS CloudFront</td>
+                            <td>静的コンテンツ配信</td>
+                        </tr>
+                        <tr>
+                            <td>メール送信</td>
+                            <td>AWS SES</td>
+                            <td>通知メール配信</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>環境情報</h4>
+                <table>
+                    <tr>
+                        <th>環境</th>
+                        <th>URL</th>
+                        <th>データベース</th>
+                    </tr>
+                    <tr>
+                        <td>本番環境</td>
+                        <td>https://farmlog.agreen.inc</td>
+                        <td>farmlog_prod</td>
+                    </tr>
+                    <tr>
+                        <td>開発環境</td>
+                        <td>https://stg.farmlog.agreen.inc</td>
+                        <td>green_carbon_dev</td>
+                    </tr>
+                </table>
+                
+                <h3>1.3 開発スコープ</h3>
+                
+                <!-- 前提条件：開発スコープ外 -->
+                <div style="background: #f5f5f5; border: 2px solid #757575; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                    <strong>【前提条件：開発スコープ外】</strong><br>
+                    <strong>0.</strong> (現在) Agreen→農家アプリを経由した作業ログ、衛星解析（GIS）による灌水データなどを蓄積
+                </div>
+                
+                <!-- 今回の開発スコープ -->
+                <div class="highlight-box">
+                    <strong>【今回の開発スコープ】</strong><br>
+                    <strong>1.</strong> 農研機構APIより土壌データ、気象庁APIより気象データを取得し、Regrow APIで必要となるパラメータを補完する<br>
+                    <strong>2.</strong> 0, 1のデータを根拠として、Regrow→DNDCモデルにより、炭素固定やメタンガス排出量などのデータを取得し、投資家向けページへ表示する。また、Silveraへクレジット申請を行うための根拠として利用する。<br>
+                    <strong>3.</strong> 2のデータを根拠として、Silveraより信頼評価やクレジット創出量の予測を行い、投資家向けページへ表示し、プロジェクト期間中でも改善を行うことができるようにする。
+                </div>
+                
+                <h4>開発項目一覧</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>開発対象</th>
+                            <th>項目名</th>
+                            <th>内容</th>
+                            <th>技術仕様</th>
+                            <th>依存関係</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="5"><strong>データベース<br/>(PostgreSQL)</strong></td>
+                            <td>soil_data テーブル</td>
+                            <td>土壌パラメータ保存用新規テーブル</td>
+                            <td>ph, clay_fraction, sand_fraction, silt_fraction, bulk_density, soc</td>
+                            <td>農研機構APIデータ格納</td>
+                        </tr>
+                        <tr>
+                            <td>weather_data テーブル</td>
+                            <td>詳細気象データ保存用新規テーブル</td>
+                            <td>temperature, humidity, precipitation, solar_radiation, wind_speed</td>
+                            <td>気象庁APIデータ格納</td>
+                        </tr>
+                        <tr>
+                            <td>carbon_calculations テーブル</td>
+                            <td>炭素計算結果保存用新規テーブル</td>
+                            <td>regrow_project_id, co2_sequestration, ch4_emissions, n2o_emissions, net_carbon_balance, regrow_response(JSONB)</td>
+                            <td>Regrow API結果格納</td>
+                        </tr>
+                        <tr>
+                            <td>credit_assessments テーブル</td>
+                            <td>信用評価結果保存用新規テーブル</td>
+                            <td>silvera_project_id, credit_rating, risk_score, expected_roi, silvera_response(JSONB)</td>
+                            <td>Silvera API結果格納</td>
+                        </tr>
+                        <tr>
+                            <td>regrow_api_logs テーブル</td>
+                            <td>API呼出履歴・エラーログ保存</td>
+                            <td>request_payload, response_payload, status_code, error_message</td>
+                            <td>監視・デバッグ用</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5"><strong>バックエンド<br/>(Python/Lambda)</strong></td>
+                            <td>炭素計算バッチ処理</td>
+                            <td>Regrow API連携＋データ補完処理</td>
+                            <td>新規Lambda: regrow-carbon-calculator<br/>EventBridge: タームはTBD（例: 毎日24時実行）</td>
+                            <td>農研機構・気象庁API連携含む</td>
+                        </tr>
+                        <tr>
+                            <td>信用評価バッチ処理</td>
+                            <td>Silvera API連携処理</td>
+                            <td>新規Lambda: silvera-credit-assessor<br/>EventBridge: タームはTBD（例: 週次実行）</td>
+                            <td>carbon_calculations参照</td>
+                        </tr>
+                        <tr>
+                            <td>炭素データ取得API</td>
+                            <td>農家・投資家向けデータ提供</td>
+                            <td>既存Chalice APIに追加<br/>GET /api/farms/{id}/carbon-report</td>
+                            <td>農家アプリ表示用</td>
+                        </tr>
+                        <tr>
+                            <td>信用評価データ取得API</td>
+                            <td>投資家向け評価データ提供</td>
+                            <td>既存Chalice APIに追加<br/>GET /api/projects/{id}/credit-assessment</td>
+                            <td>投資家ポータル表示用</td>
+                        </tr>
+                        <tr>
+                            <td>統合プロジェクトAPI</td>
+                            <td>炭素＋信用評価統合データ提供</td>
+                            <td>既存Chalice APIに追加<br/>GET /api/investor/enhanced-projects</td>
+                            <td>全データ結合表示</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>フロントエンド<br/>(Flutter)</strong></td>
+                            <td>農家アプリ拡張</td>
+                            <td>炭素計算結果レポート画面追加</td>
+                            <td><span style="color: red; font-weight: bold;">要検討：</span>既存Flutter Web/Mobileに画面追加<br/>グラフ表示（Chart.js相当）</td>
+                            <td>炭素データ取得API利用</td>
+                        </tr>
+                        <tr>
+                            <td>投資家ポータル拡張</td>
+                            <td>信用評価・ROI予測表示機能追加</td>
+                            <td><span style="color: red; font-weight: bold;">要検討：</span>既存投資家ポータルに画面追加<br/>評価バッジ、リスクメーター表示</td>
+                            <td>統合プロジェクトAPI利用</td>
+                        </tr>
+                        <tr>
+                            <td>ダッシュボード強化</td>
+                            <td>カーボンクレジット統計表示</td>
+                            <td><span style="color: red; font-weight: bold;">要検討：</span>集計グラフ、トレンド分析表示</td>
+                            <td>時系列データ可視化</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>外部API連携<br/>(認証設定)</strong></td>
+                            <td>Regrow/Silvera API認証</td>
+                            <td>APIキー管理・シークレット設定</td>
+                            <td>AWS Secrets Manager利用<br/>Bearer Token/API Key管理</td>
+                            <td>環境変数設定</td>
+                        </tr>
+                        <tr>
+                            <td>公開API連携</td>
+                            <td>農研機構・気象庁API接続</td>
+                            <td>レート制限対応、キャッシュ実装</td>
+                            <td>リトライ処理実装</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>1.4 データベース設計</h3>
+                
+                <h4>1.4.1 As-Is：現行スキーマ要約</h4>
+                
+                <h5>本連携に関係する既存テーブル一覧</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>テーブル名</th>
+                            <th>用途</th>
+                            <th>主要カラム</th>
+                            <th>連携での役割</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>users</strong></td>
+                            <td>ユーザー管理</td>
+                            <td>id (PK), cognito_sub, username, email</td>
+                            <td>農家・投資家の基本情報</td>
+                        </tr>
+                        <tr>
+                            <td><strong>projects</strong></td>
+                            <td>プロジェクト管理</td>
+                            <td>id (PK), name, description</td>
+                            <td>投資対象プロジェクト</td>
+                        </tr>
+                        <tr>
+                            <td><strong>farm_fields</strong></td>
+                            <td>圃場管理</td>
+                            <td>id (PK), name, user_id (FK), group_id (FK)<br/>
+                            ❌ latitude, longitude, area, crop_type</td>
+                            <td>炭素計算の対象単位</td>
+                        </tr>
+                        <tr>
+                            <td><strong>farmwork_log</strong></td>
+                            <td>作業記録メイン</td>
+                            <td>id (PK), farm_field_id (FK), work_date, manager</td>
+                            <td>作業履歴の親テーブル</td>
+                        </tr>
+                        <tr>
+                            <td><strong>farmwork_log_*</strong></td>
+                            <td>作業詳細記録</td>
+                            <td colspan="2">
+                                • farmwork_log_water_level_record（水位管理）<br/>
+                                • farmwork_log_fertilizer_record（施肥記録）<br/>
+                                • farmwork_log_organic_amendment_record（有機物施用）<br/>
+                                • farmwork_log_weather_record（気象記録）
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>不足データと補完方針</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>不足データ</th>
+                            <th>現状</th>
+                            <th>補完方針</th>
+                            <th>実装時期</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>圃場位置情報</td>
+                            <td>farm_fields.latitude/longitude 未実装</td>
+                            <td>GIS連携で取得</td>
+                            <td>11月（別途開発）</td>
+                        </tr>
+                        <tr>
+                            <td>圃場面積</td>
+                            <td>farm_fields.area 未実装</td>
+                            <td>GIS連携で取得</td>
+                            <td>11月（別途開発）</td>
+                        </tr>
+                        <tr>
+                            <td>作物情報</td>
+                            <td>farm_fields.crop_type 未実装</td>
+                            <td><span style="color: red; font-weight: bold;">要検討：</span>「rice」固定で実装</td>
+                            <td>今回開発</td>
+                        </tr>
+                        <tr>
+                            <td>詳細土壌データ</td>
+                            <td>pH、粘土含有率等なし</td>
+                            <td>農研機構API＋新規テーブル</td>
+                            <td>今回開発</td>
+                        </tr>
+                        <tr>
+                            <td>詳細気象データ</td>
+                            <td>基本的な温度・天候のみ</td>
+                            <td>気象庁API＋新規テーブル</td>
+                            <td>今回開発</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>1.4.2 To-Be：追加テーブル設計</h4>
+                
+                <h5>新規テーブル一覧（PK/FK/制約含む）</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>テーブル名</th>
+                            <th><span style="color: red; font-weight: bold;">要検討：</span>カラム定義</th>
+                            <th>制約</th>
+                            <th>用途</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>soil_data</strong></td>
+                            <td>
+                                id SERIAL (PK)<br/>
+                                farm_field_id INTEGER (FK→farm_fields.id)<br/>
+                                measured_date DATE<br/>
+                                ph DECIMAL(3,1)<br/>
+                                clay_fraction DECIMAL(3,2)<br/>
+                                sand_fraction DECIMAL(3,2)<br/>
+                                silt_fraction DECIMAL(3,2)<br/>
+                                bulk_density DECIMAL(3,2)<br/>
+                                soc DECIMAL(4,2)<br/>
+                                created_at TIMESTAMP<br/>
+                                updated_at TIMESTAMP
+                            </td>
+                            <td>
+                                UNIQUE(farm_field_id, measured_date)<br/>
+                                CHECK(clay_fraction + sand_fraction + silt_fraction = 1.0)<br/>
+                                ON DELETE CASCADE
+                            </td>
+                            <td>農研機構APIから取得した土壌データ保存</td>
+                        </tr>
+                        <tr>
+                            <td><strong>weather_data</strong></td>
+                            <td>
+                                id SERIAL (PK)<br/>
+                                farm_field_id INTEGER (FK→farm_fields.id)<br/>
+                                observation_date DATE<br/>
+                                temperature_avg DECIMAL(4,1)<br/>
+                                temperature_max DECIMAL(4,1)<br/>
+                                temperature_min DECIMAL(4,1)<br/>
+                                humidity DECIMAL(5,2)<br/>
+                                precipitation DECIMAL(6,2)<br/>
+                                solar_radiation DECIMAL(6,2)<br/>
+                                wind_speed DECIMAL(4,1)<br/>
+                                created_at TIMESTAMP<br/>
+                                updated_at TIMESTAMP
+                            </td>
+                            <td>
+                                UNIQUE(farm_field_id, observation_date)<br/>
+                                ON DELETE CASCADE
+                            </td>
+                            <td>気象庁APIから取得した詳細気象データ保存</td>
+                        </tr>
+                        <tr>
+                            <td><strong>carbon_calculations</strong></td>
+                            <td>
+                                id SERIAL (PK)<br/>
+                                farm_field_id INTEGER (FK→farm_fields.id)<br/>
+                                calculation_date DATE<br/>
+                                regrow_project_id VARCHAR(255)<br/>
+                                regrow_calculation_id VARCHAR(255)<br/>
+                                co2_sequestration DECIMAL(10,4)<br/>
+                                ch4_emissions DECIMAL(10,4)<br/>
+                                n2o_emissions DECIMAL(10,4)<br/>
+                                net_carbon_balance DECIMAL(10,4)<br/>
+                                confidence_interval_lower DECIMAL(10,4)<br/>
+                                confidence_interval_upper DECIMAL(10,4)<br/>
+                                regrow_response JSONB<br/>
+                                created_at TIMESTAMP<br/>
+                                updated_at TIMESTAMP
+                            </td>
+                            <td>
+                                UNIQUE(farm_field_id, calculation_date)<br/>
+                                INDEX(regrow_project_id)<br/>
+                                ON DELETE CASCADE
+                            </td>
+                            <td>Regrow APIの炭素計算結果保存</td>
+                        </tr>
+                        <tr>
+                            <td><strong>credit_assessments</strong></td>
+                            <td>
+                                id SERIAL (PK)<br/>
+                                farm_field_id INTEGER (FK→farm_fields.id)<br/>
+                                assessment_date DATE<br/>
+                                silvera_project_id VARCHAR(255)<br/>
+                                credit_rating VARCHAR(10)<br/>
+                                risk_score DECIMAL(5,2)<br/>
+                                viability_score DECIMAL(5,2)<br/>
+                                expected_roi DECIMAL(5,2)<br/>
+                                confidence_level VARCHAR(20)<br/>
+                                silvera_response JSONB<br/>
+                                created_at TIMESTAMP<br/>
+                                updated_at TIMESTAMP
+                            </td>
+                            <td>
+                                UNIQUE(farm_field_id, assessment_date)<br/>
+                                CHECK(risk_score BETWEEN 0 AND 100)<br/>
+                                CHECK(credit_rating IN ('AAA','AA','A','BBB','BB','B','CCC'))<br/>
+                                ON DELETE CASCADE
+                            </td>
+                            <td>Silvera APIの信用評価結果保存</td>
+                        </tr>
+                        <tr>
+                            <td><strong>regrow_api_logs</strong></td>
+                            <td>
+                                id SERIAL (PK)<br/>
+                                api_endpoint VARCHAR(255)<br/>
+                                http_method VARCHAR(10)<br/>
+                                request_timestamp TIMESTAMP<br/>
+                                response_timestamp TIMESTAMP<br/>
+                                status_code INTEGER<br/>
+                                request_payload JSONB<br/>
+                                response_payload JSONB<br/>
+                                error_message TEXT<br/>
+                                retry_count INTEGER DEFAULT 0<br/>
+                                farm_field_id INTEGER (FK→farm_fields.id NULL可)<br/>
+                                created_at TIMESTAMP
+                            </td>
+                            <td>
+                                INDEX(request_timestamp)<br/>
+                                INDEX(status_code)<br/>
+                                INDEX(farm_field_id)
+                            </td>
+                            <td>外部API呼出履歴・エラーログ</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>FKマップ（外部キー関係一覧）</h5>
+                <ul style="font-family: monospace; font-size: 0.9rem;">
+                    <li>soil_data.farm_field_id → farm_fields.id（1対多）</li>
+                    <li>weather_data.farm_field_id → farm_fields.id（1対多）</li>
+                    <li>carbon_calculations.farm_field_id → farm_fields.id（1対多）</li>
+                    <li>credit_assessments.farm_field_id → farm_fields.id（1対多）</li>
+                    <li>regrow_api_logs.farm_field_id → farm_fields.id（0..1対多、NULL可）</li>
+                    <li>farmwork_log.farm_field_id → farm_fields.id（1対多）※既存</li>
+                    <li>farm_fields.user_id → users.id（1対多）※既存</li>
+                    <li>farm_fields.group_id → groups.id（1対多）※既存</li>
+                </ul>
+                
+                <h4>1.4.3 NFR・運用制約</h4>
+                
+                <h5>性能要件</h5>
+                <p><span style="color: red; font-weight: bold;">要検討：</span>以下の性能要件を決定してください</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>要件</th>
+                            <th>備考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>想定データ量</td>
+                            <td>圃場数: 初年度1,000件、年間成長率50%<br/>
+                            炭素計算: 圃場あたり365件/年<br/>
+                            信用評価: 圃場あたり52件/年</td>
+                            <td>5年で約75万件の炭素計算データ</td>
+                        </tr>
+                        <tr>
+                            <td>レスポンスタイム</td>
+                            <td>投資家ポータル一覧表示: 100ms以内<br/>
+                            炭素レポート生成: 500ms以内<br/>
+                            バッチ処理: 圃場あたり30秒以内</td>
+                            <td>95パーセンタイル値</td>
+                        </tr>
+                        <tr>
+                            <td>可用性</td>
+                            <td>99.9%（月間ダウンタイム43分以内）</td>
+                            <td>RDS Multi-AZで実現</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>データ整合性・監査要件</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>要件</th>
+                            <th>実装方針</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>外部キー制約</td>
+                            <td>ON DELETE CASCADE（関連データ自動削除）<br/>
+                            ON UPDATE RESTRICT（親データ更新制限）</td>
+                            <td>PostgreSQL標準機能で実装</td>
+                        </tr>
+                        <tr>
+                            <td>監査ログ</td>
+                            <td>全テーブルにcreated_at/updated_at必須<br/>
+                            APIログ保管期間: 2年間</td>
+                            <td>トリガーで自動更新</td>
+                        </tr>
+                        <tr>
+                            <td>データ保護</td>
+                            <td>論理削除（deleted_at）対応<br/>
+                            個人情報の暗号化</td>
+                            <td>アプリケーション層で制御</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>保守・運用要件</h5>
+                <ul>
+                    <li><strong>マイグレーション：</strong>Peewee Migration使用、全変更履歴の管理</li>
+                    <li><strong>バックフィル：</strong>過去データの再計算API（/api/admin/recalculate）</li>
+                    <li><strong>バックアップ：</strong>日次自動バックアップ、7日間保持</li>
+                    <li><strong>JSON検索：</strong>silvera_response->'credit_rating'等の頻出項目にGINインデックス</li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>2. Regrow連携システム仕様</h2>
+                
+                <h3>2.1 システム概要</h3>
+                <p>Agreen農業データをRegrow DNDC APIに送信し、科学的根拠に基づく炭素固定量計算を実行する。</p>
+                
+                <h3>2.2 現行システム構成</h3>
+                <div class="mermaid-container flow-diagram">
+                    <pre class="mermaid">
+graph TB
+    subgraph "農家アプリ層"
+        MOBILE[Flutter Mobile App<br/>iOS/Android]
+        WEB[Flutter Web App<br/>farmlog.agreen.inc]
+    end
+    
+    subgraph "AWS Infrastructure"
+        subgraph "CDN"
+            CF[CloudFront Distribution<br/>E1WPKA4PSF1EE8]
+        end
+        
+        subgraph "Storage"
+            S3STATIC[S3 Bucket<br/>farmlog-prod]
+            S3IMAGES[S3 Bucket<br/>farmlog-resource-prod]
+        end
+        
+        subgraph "API Layer"
+            APIGW[API Gateway<br/>farmlog-prod-apis<br/>o8hjy6v1k6]
+            LAMBDA[Lambda Function<br/>green-carbon-apis-prod]
+        end
+        
+        subgraph "Authentication"
+            COGNITO[Cognito User Pool<br/>farmlog-prod<br/>ap-northeast-1_GrfupdOv2]
+        end
+        
+        subgraph "Database"
+            RDSPROXY[RDS Proxy<br/>farmlog-prod-db-proxy]
+            RDS[(PostgreSQL 17.5<br/>farmlog-prod-multi-az-dbs)]
+        end
+    end
+    
+    subgraph "Database Tables (現行)"
+        USERS[users<br/>- id, cognito_sub<br/>- username, email]
+        PROJECTS[projects<br/>- id, name<br/>- description]
+        FARMFIELDS[farm_fields<br/>- id, name<br/>- user_id, group_id<br/>❌ latitude, longitude<br/>❌ area, crop_type]
+        FARMLOG[farmwork_log<br/>- id, farm_field_id<br/>- work_date, manager]
+        ACTIVITIES[各作業記録テーブル<br/>- farmwork_log_fertilizer<br/>- farmwork_log_water_level<br/>- farmwork_log_organic_amendment]
+    end
+    
+    MOBILE --> CF
+    WEB --> CF
+    CF --> S3STATIC
+    CF --> APIGW
+    APIGW --> LAMBDA
+    LAMBDA --> COGNITO
+    LAMBDA --> RDSPROXY
+    RDSPROXY --> RDS
+    
+    RDS -.-> USERS
+    RDS -.-> PROJECTS
+    RDS -.-> FARMFIELDS
+    RDS -.-> FARMLOG
+    RDS -.-> ACTIVITIES
+    
+    LAMBDA --> S3IMAGES
+    
+    style MOBILE fill:#e3f2fd,stroke:#2196f3
+    style WEB fill:#e3f2fd,stroke:#2196f3
+    style CF fill:#fff3e0,stroke:#ff9800
+    style S3STATIC fill:#fff3e0,stroke:#ff9800
+    style S3IMAGES fill:#fff3e0,stroke:#ff9800
+    style APIGW fill:#fff3e0,stroke:#ff9800
+    style LAMBDA fill:#fff3e0,stroke:#ff9800
+    style COGNITO fill:#fff3e0,stroke:#ff9800
+    style RDSPROXY fill:#e8f5e8,stroke:#4caf50
+    style RDS fill:#e8f5e8,stroke:#4caf50
+    style FARMFIELDS fill:#ffebee,stroke:#e91e63
+                    </pre>
+                </div>
+                
+                <h3>2.3 Regrow統合後のデータフロー</h3>
+                <div class="mermaid-container flow-diagram">
+                    <pre class="mermaid">
+graph TB
+    subgraph "データ収集層"
+        FARMER[農家<br/>作業記録入力]
+        FARMLOG_TBL[(farmwork_log<br/>farmwork_log_fertilizer<br/>farmwork_log_water_level)]
+    end
+    
+    subgraph "データ補完層 (新規追加)"
+        NARO[農研機構API<br/>https://agriknowledge.affrc.go.jp<br/>土壌データ取得]
+        JMA[気象庁API<br/>https://www.jma.go.jp/bosai<br/>気象データ取得]
+        NEWSOIL[(soil_data 新規テーブル<br/>- ph, clay_fraction<br/>- bulk_density, soc)]
+        NEWWEATHER[(weather_data 新規テーブル<br/>- temperature, humidity<br/>- precipitation, solar_radiation)]
+    end
+    
+    subgraph "炭素計算層 (新規追加)"
+        BATCHLAMBDA[新規Lambda Function<br/>regrow-carbon-calculator<br/>バッチ処理: タームはTBD]
+        REGROWAPI[Regrow DNDC API<br/>https://api.regrow.ag/v1/dndc<br/>Bearer Token認証]
+        CARBON_TBL[(carbon_calculations 新規テーブル<br/>- regrow_project_id<br/>- co2_sequestration<br/>- ch4_emissions, n2o_emissions<br/>- net_carbon_balance<br/>- regrow_response JSONB)]
+    end
+    
+    subgraph "レポート生成層"
+        CHALICE[既存Chalice API<br/>新エンドポイント追加]
+        SESMAIL[AWS SES<br/>農家向けレポート送信]
+    end
+    
+    FARMER --> FARMLOG_TBL
+    FARMLOG_TBL --> BATCHLAMBDA
+    NARO --> NEWSOIL
+    JMA --> NEWWEATHER
+    NEWSOIL --> BATCHLAMBDA
+    NEWWEATHER --> BATCHLAMBDA
+    BATCHLAMBDA --> REGROWAPI
+    REGROWAPI --> CARBON_TBL
+    CARBON_TBL --> CHALICE
+    CHALICE --> SESMAIL
+    
+    style FARMER fill:#e3f2fd,stroke:#2196f3
+    style FARMLOG_TBL fill:#e3f2fd,stroke:#2196f3
+    style NARO fill:#f3e5f5,stroke:#9c27b0
+    style JMA fill:#f3e5f5,stroke:#9c27b0
+    style REGROWAPI fill:#f3e5f5,stroke:#9c27b0
+    style BATCHLAMBDA fill:#fff8e1,stroke:#ff9800
+    style NEWSOIL fill:#e8f5e8,stroke:#4caf50
+    style NEWWEATHER fill:#e8f5e8,stroke:#4caf50
+    style CARBON_TBL fill:#e8f5e8,stroke:#4caf50
+    style CHALICE fill:#fff3e0,stroke:#ff9800
+    style SESMAIL fill:#fff3e0,stroke:#ff9800
+                    </pre>
+                </div>
+                
+                <h3>2.3 API連搼シーケンス</h3>
+                <h4>2.3.1 Regrowデータ送信シーケンス</h4>
+                <div class="mermaid-container sequence-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    participant F as 農家
+    participant App as モバイルアプリ
+    participant API as Chalice API
+    participant DB as PostgreSQL
+    participant RG as Regrow API
+    
+    F->>App: 作業記録入力
+    App->>API: POST /api/farmwork/log
+    API->>DB: データ保存
+    DB-->>API: 保存完了
+    API-->>App: 成功レスポンス
+    App-->>F: 保存確認
+    
+    Note over API: 夜間バッチ処理
+    API->>DB: 農業データ取得
+    API->>API: データ変換・補完
+    API->>RG: POST /v1/projects/{id}/calculate
+    RG->>RG: DNDC計算実行
+    RG-->>API: 計算結果（JSON）
+    API->>DB: 計算結果をPostgreSQLに保存
+    DB-->>API: 保存完了
+    
+    Note over API: レポート生成
+    API->>DB: 計算結果取得
+    API->>API: レポート生成
+    API->>API: 農家向け通知
+                    </pre>
+                </div>
+                
+                <h3>2.4 新規テーブル設計</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>テーブル名</th>
+                            <th>主要フィールド</th>
+                            <th>用途</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>soil_data</td>
+                            <td>ph, clay_fraction, bulk_density, soc</td>
+                            <td>農研機構APIからの土壌データ保存</td>
+                        </tr>
+                        <tr>
+                            <td>weather_data</td>
+                            <td>temperature, humidity, precipitation, solar_radiation</td>
+                            <td>気象庁APIからの詳細気象データ</td>
+                        </tr>
+                        <tr>
+                            <td>carbon_calculations</td>
+                            <td>co2_sequestration, ch4_emissions, n2o_emissions, net_carbon_balance, regrow_response</td>
+                            <td>Regrow APIからの計算結果をPostgreSQLに保存</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>2.5 Regrow API仕様</h3>
+                <div class="api-endpoint">
+                    <strong>Regrow API:</strong> https://api.regrow.ag/v1/dndc/
+                    <br><strong>認証:</strong> Bearer Token
+                    <br><strong>ドキュメント:</strong> https://docs.regrow.ag/dndc-api
+                </div>
+                
+                <h4>2.5.1 プロジェクト作成</h4>
+                <div class="code-block json">POST /v1/projects
+{
+  "name": "Agreen Farm Field 001",
+  "location": {
+    "latitude": 35.6762,
+    "longitude": 139.6503,
+    "country": "JP"
+  },
+  "area_hectares": 2.5,
+  "crop_type": "rice",
+  "management_practices": {
+    "fertilizer": {
+      "type": "urea",
+      "amount_kg_per_ha": 120
+    },
+    "irrigation": {
+      "method": "continuous_flooding",
+      "water_depth_cm": 5
+    },
+    "organic_amendments": {
+      "type": "rice_straw",
+      "amount_kg_per_ha": 800
+    }
+  }
+}</div>
+                
+                <h4>2.5.2 炭素計算実行</h4>
+                <div class="code-block json">POST /v1/projects/{project_id}/calculate
+{
+  "calculation_year": 2024,
+  "soil_data": {
+    "ph": 6.5,
+    "clay_fraction": 0.35,
+    "bulk_density": 1.2,
+    "soil_organic_carbon": 2.1
+  },
+  "weather_data": {
+    "temperature_avg": 15.5,
+    "precipitation_mm": 1200,
+    "humidity_percent": 75
+  },
+  "management_timeline": [
+    {
+      "date": "2024-04-01",
+      "activity": "planting",
+      "details": {"variety": "japonica"}
+    },
+    {
+      "date": "2024-05-15",
+      "activity": "fertilizer_application",
+      "details": {"type": "urea", "amount_kg": 300}
+    }
+  ]
+}</div>
+                
+                <h4>2.5.3 計算結果取得</h4>
+                <div class="code-block json">GET /v1/projects/{project_id}/results/{calculation_id}
+
+Response:
+{
+  "calculation_id": "calc_123456",
+  "status": "completed",
+  "carbon_balance": {
+    "co2_sequestration_tonnes_per_ha": 2.8,
+    "ch4_emissions_tonnes_co2e_per_ha": 1.2,
+    "n2o_emissions_tonnes_co2e_per_ha": 0.3,
+    "net_carbon_balance_tonnes_co2e_per_ha": 1.3
+  },
+  "confidence_interval": {
+    "lower_bound": 0.9,
+    "upper_bound": 1.7
+  },
+  "methodology": "IPCC 2019 Guidelines with DNDC model",
+  "calculation_date": "2024-09-06T10:30:00Z"
+}</div>
+            </section>
+            
+            <section class="section">
+                <h2>3. Silvera連携システム仕様</h2>
+                
+                <h3>3.1 システム概要</h3>
+                <p>Regrowの炭素計算結果を基にSilvera信用評価APIと連携し、投資家向け信用評価・リスク分析・ROI予測の表示機能を構築する。</p>
+                
+                <h3>3.2 信用評価データパイプライン</h3>
+                <div class="mermaid-container flow-diagram">
+                    <pre class="mermaid">
+graph TB
+    subgraph ExistingData[既存データソース]
+        CARBON_DATA[(carbon_calculations<br/>Regrow計算結果)]
+        FARM_HISTORY[(farmwork_log系テーブル<br/>農家の作業履歴)]
+        USER_DATA[(users, projects<br/>農家基本情報)]
+    end
+    
+    subgraph NewCreditSystem[新規追加: 信用評価データ生成]
+        ASSESSMENT_LAMBDA[新規Lambda Function<br/>silvera-credit-assessor<br/>バッチ処理: タームはTBD]
+        SILVERA_API[Silvera Credit API<br/>https://api.silvera.io/v1/credit<br/>API Key認証]
+        CREDIT_TBL[(credit_assessments 新規テーブル<br/>- farm_field_id<br/>- silvera_project_id<br/>- credit_rating: AAA,AA,A,BBB...<br/>- risk_score: 0-100<br/>- expected_roi<br/>- silvera_response JSONB)]
+    end
+    
+    subgraph NewPortal[新規追加: 投資家ポータル]
+        INVESTOR_API[既存Chalice API<br/>投資家向けエンドポイント追加]
+        INVESTOR_WEB[既存投資家ポータル<br/>investor.agreen.inc<br/>機能拡張]
+        INVESTOR_S3[既存S3 Bucket<br/>投資家ポータル用]
+    end
+    
+    CARBON_DATA --> ASSESSMENT_LAMBDA
+    FARM_HISTORY --> ASSESSMENT_LAMBDA
+    USER_DATA --> ASSESSMENT_LAMBDA
+    ASSESSMENT_LAMBDA --> SILVERA_API
+    SILVERA_API --> CREDIT_TBL
+    CREDIT_TBL --> INVESTOR_API
+    INVESTOR_API --> INVESTOR_WEB
+    INVESTOR_WEB --> INVESTOR_S3
+    
+    style CARBON_DATA fill:#e3f2fd,stroke:#2196f3
+    style FARM_HISTORY fill:#e3f2fd,stroke:#2196f3
+    style USER_DATA fill:#e3f2fd,stroke:#2196f3
+    style SILVERA_API fill:#f3e5f5,stroke:#9c27b0
+    style ASSESSMENT_LAMBDA fill:#fff8e1,stroke:#ff9800
+    style CREDIT_TBL fill:#e8f5e8,stroke:#4caf50
+    style INVESTOR_API fill:#fff3e0,stroke:#ff9800
+    style INVESTOR_WEB fill:#fff3e0,stroke:#ff9800
+    style INVESTOR_S3 fill:#fff3e0,stroke:#ff9800
+                    </pre>
+                </div>
+                
+                <h3>3.3 投資家ポータル表示シーケンス</h3>
+                <div class="mermaid-container sequence-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    participant I as 投資家
+    participant Web as 投資家ポータル
+    participant API as Agreen API
+    participant DB as PostgreSQL
+    participant Sil as Silvera API
+    
+    I->>Web: プロジェクト検索
+    Web->>API: GET /api/projects/list
+    API->>DB: プロジェクト一覧取得
+    DB-->>API: プロジェクトリスト
+    
+    loop 各プロジェクト
+        API->>DB: 炭素計算データ取得
+        API->>Sil: POST /v1/credit-assessment
+        Sil->>Sil: リスク分析
+        Sil->>Sil: 信用格付け
+        Sil-->>API: 評価結果
+        API->>DB: 評価結果保存
+    end
+    
+    API-->>Web: プロジェクト＋評価データ
+    Web-->>I: 投資機会表示
+    
+    I->>Web: 詳細レポート要求
+    Web->>API: GET /api/projects/{id}/report
+    API->>DB: 詳細データ取得
+    API-->>Web: 詳細レポート
+    Web-->>I: レポート表示
+                    </pre>
+                </div>
+                
+                <h3>3.4 Silvera API仕様</h3>
+                <div class="api-endpoint">
+                    <strong>Silvera API:</strong> https://api.silvera.io/v1/credit/
+                    <br><strong>認証:</strong> API Key
+                    <br><strong>ドキュメント:</strong> https://docs.silvera.io/credit-api
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>4. 統合システムアーキテクチャ</h2>
+                
+                <h3>4.1 統合システム全体構成</h3>
+                <div class="mermaid-container flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    %% Frontend Access
+    DNS1[Route 53 DNS<br/>farmlog.agreen.inc]
+    DNS2[Route 53 DNS<br/>investor.agreen.inc]
+    
+    CF1[CloudFront<br/>E1WPKA4PSF1EE8<br/>農家向けアプリ]
+    CF2[CloudFront<br/>投資家向けポータル]
+    
+    S3_FARM[S3: farmlog-prod<br/>Flutter Web]
+    S3_INVESTOR[S3: 投資家ポータル<br/>Flutter Web]
+    S3_ASSETS[S3: farmlog-resource-prod<br/>画像・ドキュメント]
+    
+    %% API Gateway
+    APIGW[API Gateway<br/>farmlog-prod-apis<br/>o8hjy6v1k6<br/>★新規エンドポイント追加]
+    
+    %% Authentication
+    COGNITO_FARM[Cognito<br/>farmlog-prod<br/>農家認証]
+    COGNITO_INVESTOR[Cognito<br/>投資家認証]
+    
+    %% Existing Lambda
+    MAIN_LAMBDA[Lambda<br/>green-carbon-apis-prod<br/>メインChalice API<br/>★新エンドポイント追加]
+    EMAIL_LAMBDA[Lambda<br/>prod-send_remind_email<br/>メール送信]
+    
+    %% New Lambda Functions (追加開発)
+    REGROW_LAMBDA[★Lambda<br/>regrow-carbon-calculator<br/>バッチ処理: タームはTBD]
+    SILVERA_LAMBDA[★Lambda<br/>silvera-credit-assessor<br/>バッチ処理: タームはTBD]
+    
+    %% Database
+    RDS_PROXY[RDS Proxy<br/>farmlog-prod-db-proxy]
+    RDS_MAIN[(PostgreSQL 17.5<br/>farmlog-prod-multi-az-dbs)]
+    
+    %% External APIs
+    REGROW_API[Regrow DNDC API<br/>Bearer Token]
+    SILVERA_API[Silvera Credit API<br/>API Key]
+    NARO_API[農研機構API<br/>土壌データ]
+    JMA_API[気象庁API<br/>気象データ]
+    
+    %% Monitoring
+    CLOUDWATCH[CloudWatch Logs]
+    SES[AWS SES]
+    SNS[AWS SNS]
+    
+    %% User Access
+    DNS1 --> CF1
+    DNS2 --> CF2
+    CF1 --> S3_FARM
+    CF2 --> S3_INVESTOR
+    
+    %% API Flow
+    CF1 --> APIGW
+    CF2 --> APIGW
+    APIGW --> MAIN_LAMBDA
+    
+    %% Authentication
+    MAIN_LAMBDA --> COGNITO_FARM
+    MAIN_LAMBDA --> COGNITO_INVESTOR
+    
+    %% Main Lambda connections
+    MAIN_LAMBDA --> RDS_PROXY
+    MAIN_LAMBDA --> S3_ASSETS
+    MAIN_LAMBDA --> SES
+    
+    %% Batch Processing
+    REGROW_LAMBDA --> RDS_PROXY
+    REGROW_LAMBDA --> REGROW_API
+    REGROW_LAMBDA --> NARO_API
+    REGROW_LAMBDA --> JMA_API
+    REGROW_LAMBDA --> SNS
+    
+    SILVERA_LAMBDA --> RDS_PROXY
+    SILVERA_LAMBDA --> SILVERA_API
+    SILVERA_LAMBDA --> SNS
+    
+    %% Database
+    RDS_PROXY --> RDS_MAIN
+    
+    %% Email
+    EMAIL_LAMBDA --> SES
+    
+    %% Monitoring
+    MAIN_LAMBDA --> CLOUDWATCH
+    REGROW_LAMBDA --> CLOUDWATCH
+    SILVERA_LAMBDA --> CLOUDWATCH
+    
+    %% Styling
+    style REGROW_LAMBDA fill:#ffebee,stroke:#e91e63,stroke-width:3px
+    style SILVERA_LAMBDA fill:#ffebee,stroke:#e91e63,stroke-width:3px
+    style REGROW_API fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    style SILVERA_API fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    style NARO_API fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    style JMA_API fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+                    </pre>
+                </div>
+                
+                <h3>4.2 データベース統合設計</h3>
+                <div class="mermaid-container er-diagram">
+                    <pre class="mermaid">
+erDiagram
+    USERS ||--o{ FARM_FIELDS : owns
+    GROUPS ||--o{ FARM_FIELDS : contains
+    FARM_FIELDS ||--o{ SOIL_DATA : has
+    FARM_FIELDS ||--o{ WEATHER_DATA : has
+    FARM_FIELDS ||--o{ CARBON_CALCULATIONS : generates
+    FARM_FIELDS ||--o{ CREDIT_ASSESSMENTS : evaluates
+    FARM_FIELDS ||--o{ FARMWORK_LOG : records
+    FARM_FIELDS ||--o| REGROW_API_LOGS : logs
+    
+    USERS {
+        int id PK
+        string cognito_sub UK
+        string username
+        string email
+        timestamp created_at
+    }
+    
+    GROUPS {
+        int id PK
+        string name
+        int project_id FK
+        timestamp created_at
+    }
+    
+    FARM_FIELDS {
+        int id PK
+        string name
+        int user_id FK
+        int group_id FK
+        decimal latitude "11月追加"
+        decimal longitude "11月追加"
+        decimal area "11月追加"
+        string area_unit "11月追加"
+        string crop_type "rice固定"
+    }
+    
+    SOIL_DATA {
+        int id PK
+        int farm_field_id FK
+        date measured_date
+        decimal ph
+        decimal clay_fraction
+        decimal sand_fraction
+        decimal silt_fraction
+        decimal bulk_density
+        decimal soc
+    }
+    
+    WEATHER_DATA {
+        int id PK
+        int farm_field_id FK
+        date observation_date
+        decimal temperature_avg
+        decimal humidity
+        decimal precipitation
+        decimal solar_radiation
+        decimal wind_speed
+    }
+    
+    CARBON_CALCULATIONS {
+        int id PK
+        int farm_field_id FK
+        date calculation_date
+        string regrow_project_id
+        decimal co2_sequestration
+        decimal ch4_emissions
+        decimal n2o_emissions
+        decimal net_carbon_balance
+        json regrow_response
+    }
+    
+    CREDIT_ASSESSMENTS {
+        int id PK
+        int farm_field_id FK
+        date assessment_date
+        string silvera_project_id
+        string credit_rating
+        decimal risk_score
+        decimal expected_roi
+        json silvera_response
+    }
+    
+    FARMWORK_LOG {
+        int id PK
+        int farm_field_id FK
+        date work_date
+        int manager FK
+        timestamp created_at
+    }
+    
+    REGROW_API_LOGS {
+        int id PK
+        int farm_field_id FK "NULL可"
+        string api_endpoint
+        timestamp request_timestamp
+        int status_code
+        json request_payload
+        json response_payload
+        string error_message
+    }
+                    </pre>
+                </div>
+                
+                <h4><span style="color: red; font-weight: bold;">要検討：</span>受入条件（ベンダー成果物）</h4>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>物理ERD：</strong>全FK・制約を含む完全なER図とDDL一式（CREATE TABLE文）</li>
+                        <li><strong>移行スクリプト：</strong>本番/ステージング環境用マイグレーション、ロールバック手順書</li>
+                        <li><strong>APIマッピング表：</strong>Regrow/Silvera/外部APIレスポンス⇔DBカラムの対応表</li>
+                        <li><strong>結合API定義：</strong>/api/farms/{id}/carbon-report、/api/projects/{id}/credit-assessment のOpenAPI仕様書</li>
+                        <li><strong>可観測性設計：</strong>regrow_api_logsのログ設計、失敗時の再実行仕様、監視ダッシュボード</li>
+                        <li><strong>性能保証：</strong>投資家ポータルのプロジェクト一覧表示が100ms以内で応答する設計</li>
+                        <li><strong>JSON扱い方針：</strong>GINインデックスまたは正規化の提案（検索要件に応じて）</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>5. 非機能要求（SLO）</h2>
+                
+                <h3>5.1 <span style="color: red; font-weight: bold;">要検討：</span>サービスレベル目標</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>目標値</th>
+                            <th>測定方法</th>
+                            <th>備考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>API可用性</td>
+                            <td>99.9%</td>
+                            <td>CloudWatch Synthetics</td>
+                            <td>月間ダウンタイム43分以内</td>
+                        </tr>
+                        <tr>
+                            <td>API応答時間（95%ile）</td>
+                            <td style="color: red;">TBD</td>
+                            <td>X-Ray分散トレーシング</td>
+                            <td>エンドポイント別に設定予定</td>
+                        </tr>
+                        <tr>
+                            <td>バッチ処理完了時間</td>
+                            <td style="color: red;">TBD</td>
+                            <td>CloudWatch Logs</td>
+                            <td>データ量に応じて調整</td>
+                        </tr>
+                        <tr>
+                            <td>外部API成功率</td>
+                            <td>95%以上</td>
+                            <td>regrow_api_logs集計</td>
+                            <td>リトライ含む最終成功率</td>
+                        </tr>
+                        <tr>
+                            <td>データ整合性</td>
+                            <td>100%</td>
+                            <td>日次整合性チェック</td>
+                            <td>FK制約違反ゼロ</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>5.2 <span style="color: red; font-weight: bold;">要検討：</span>パフォーマンス要件</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>API/機能</th>
+                            <th>想定TPS</th>
+                            <th>レスポンスタイム目標</th>
+                            <th>タイムアウト設定</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>GET /api/farms/{id}/carbon-report</td>
+                            <td style="color: red;">TBD</td>
+                            <td style="color: red;">TBD（目標: 500ms以内）</td>
+                            <td>30秒</td>
+                        </tr>
+                        <tr>
+                            <td>GET /api/investor/enhanced-projects</td>
+                            <td style="color: red;">TBD</td>
+                            <td style="color: red;">TBD（目標: 100ms以内）</td>
+                            <td>30秒</td>
+                        </tr>
+                        <tr>
+                            <td>Regrow API呼出（バッチ）</td>
+                            <td>1圃場/30秒</td>
+                            <td style="color: red;">TBD</td>
+                            <td>300秒</td>
+                        </tr>
+                        <tr>
+                            <td>Silvera API呼出（バッチ）</td>
+                            <td>1圃場/10秒</td>
+                            <td style="color: red;">TBD</td>
+                            <td>60秒</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <section class="section">
+                <h2>6. 運用・監視</h2>
+                
+                <h3>6.1 <span style="color: red; font-weight: bold;">要検討：</span>監視項目と閾値</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>監視項目</th>
+                            <th>メトリクス</th>
+                            <th>Warning閾値</th>
+                            <th>Critical閾値</th>
+                            <th>通知先</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>API失敗率</td>
+                            <td>5xx応答/全リクエスト</td>
+                            <td>5%（5分間）</td>
+                            <td>10%（5分間）</td>
+                            <td>SNS → Slack</td>
+                        </tr>
+                        <tr>
+                            <td>API Rate Limit</td>
+                            <td>429応答数</td>
+                            <td>10件/分</td>
+                            <td>50件/分</td>
+                            <td>SNS → Slack</td>
+                        </tr>
+                        <tr>
+                            <td>バッチ処理遅延</td>
+                            <td>実行時間</td>
+                            <td>想定時間×1.5</td>
+                            <td>想定時間×2</td>
+                            <td>SNS → PagerDuty</td>
+                        </tr>
+                        <tr>
+                            <td>SQSキュー滞留</td>
+                            <td>メッセージ数</td>
+                            <td>1,000件</td>
+                            <td>5,000件</td>
+                            <td>SNS → Slack</td>
+                        </tr>
+                        <tr>
+                            <td>RDS CPU使用率</td>
+                            <td>CPU Utilization</td>
+                            <td>70%（5分間）</td>
+                            <td>90%（5分間）</td>
+                            <td>SNS → PagerDuty</td>
+                        </tr>
+                        <tr>
+                            <td>RDS IOPS</td>
+                            <td>Read/Write IOPS</td>
+                            <td>上限の80%</td>
+                            <td>上限の95%</td>
+                            <td>SNS → Slack</td>
+                        </tr>
+                        <tr>
+                            <td>RDS接続数</td>
+                            <td>Database Connections</td>
+                            <td>上限の70%</td>
+                            <td>上限の90%</td>
+                            <td>SNS → PagerDuty</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>6.2 <span style="color: red; font-weight: bold;">要検討：</span>一次対応Runbook</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>アラート</th>
+                            <th>確認事項</th>
+                            <th>一次対応</th>
+                            <th>エスカレーション</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>API 5xx多発</td>
+                            <td>1. CloudWatchログ確認<br/>2. RDS接続状態<br/>3. 外部API状態</td>
+                            <td>1. Lambda再起動<br/>2. RDS Proxy接続リセット</td>
+                            <td>30分改善なし→開発チーム</td>
+                        </tr>
+                        <tr>
+                            <td>バッチ処理停止</td>
+                            <td>1. EventBridge実行履歴<br/>2. Lambda実行ログ<br/>3. DLQ確認</td>
+                            <td>1. 手動再実行<br/>2. DLQメッセージ再投入</td>
+                            <td>2回失敗→開発チーム</td>
+                        </tr>
+                        <tr>
+                            <td>RDS高負荷</td>
+                            <td>1. 実行中クエリ確認<br/>2. 接続元特定<br/>3. スロークエリログ</td>
+                            <td>1. 長時間クエリ停止<br/>2. 読取レプリカ追加検討</td>
+                            <td>1時間継続→インフラチーム</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>6.3 <span style="color: red; font-weight: bold;">要検討：</span>ログ管理</h3>
+                <ul>
+                    <li><strong>ログ保持期間：</strong>12か月（CloudWatch Logs）</li>
+                    <li><strong>個人情報マスキング：</strong>email、username等は自動マスキング（例: u***@example.com）</li>
+                    <li><strong>ログレベル：</strong>本番=INFO、開発=DEBUG</li>
+                    <li><strong>構造化ログ：</strong>JSON形式で出力、検索可能</li>
+                    <li><strong>監査ログ：</strong>全API呼出、データ変更を記録</li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>7. セキュリティ</h2>
+                
+                <h3>7.1 <span style="color: red; font-weight: bold;">要検討：</span>IAM最小権限マトリクス</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>リソース/サービス</th>
+                            <th>regrow-carbon-calculator</th>
+                            <th>silvera-credit-assessor</th>
+                            <th>green-carbon-apis-prod</th>
+                            <th>備考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>RDS（farmlog_prod）</td>
+                            <td>読取/書込</td>
+                            <td>読取/書込</td>
+                            <td>読取/書込</td>
+                            <td>RDS Proxy経由</td>
+                        </tr>
+                        <tr>
+                            <td>Secrets Manager</td>
+                            <td>読取（API Key）</td>
+                            <td>読取（API Key）</td>
+                            <td>読取（DB認証情報）</td>
+                            <td>特定シークレットのみ</td>
+                        </tr>
+                        <tr>
+                            <td>S3（farmlog-resource）</td>
+                            <td>なし</td>
+                            <td>なし</td>
+                            <td>読取/書込</td>
+                            <td>画像アップロード用</td>
+                        </tr>
+                        <tr>
+                            <td>CloudWatch Logs</td>
+                            <td>書込</td>
+                            <td>書込</td>
+                            <td>書込</td>
+                            <td>自動生成ロググループ</td>
+                        </tr>
+                        <tr>
+                            <td>SNS</td>
+                            <td>発行</td>
+                            <td>発行</td>
+                            <td>なし</td>
+                            <td>エラー通知用</td>
+                        </tr>
+                        <tr>
+                            <td>X-Ray</td>
+                            <td>書込</td>
+                            <td>書込</td>
+                            <td>書込</td>
+                            <td>トレーシング</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>7.2 <span style="color: red; font-weight: bold;">要検討：</span>シークレット管理</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>シークレット名</th>
+                            <th>内容</th>
+                            <th>ローテーション</th>
+                            <th>利用元</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>farmlog-prod/rds</td>
+                            <td>RDS接続情報</td>
+                            <td>90日自動</td>
+                            <td>全Lambda関数</td>
+                        </tr>
+                        <tr>
+                            <td>external-api/regrow</td>
+                            <td>Regrow Bearer Token</td>
+                            <td>手動（有効期限前）</td>
+                            <td>regrow-carbon-calculator</td>
+                        </tr>
+                        <tr>
+                            <td>external-api/silvera</td>
+                            <td>Silvera API Key</td>
+                            <td>手動（年次）</td>
+                            <td>silvera-credit-assessor</td>
+                        </tr>
+                        <tr>
+                            <td>external-api/naro</td>
+                            <td>農研機構APIキー</td>
+                            <td>不要（公開API）</td>
+                            <td>regrow-carbon-calculator</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>7.3 <span style="color: red; font-weight: bold;">要検討：</span>セキュリティ対策</h3>
+                <ul>
+                    <li><strong>通信暗号化：</strong>全API通信はHTTPS必須（TLS 1.2以上）</li>
+                    <li><strong>認証：</strong>Cognito JWTトークン検証、有効期限1時間</li>
+                    <li><strong>認可：</strong>ユーザーロールベース（農家/投資家/管理者）</li>
+                    <li><strong>入力検証：</strong>SQLインジェクション対策（Peewee ORM使用）</li>
+                    <li><strong>監査証跡：</strong>全データ変更をregrow_api_logsに記録</li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>8. 受入条件（DoD）</h2>
+                
+                <h3>8.1 <span style="color: red; font-weight: bold;">要検討：</span>成果物チェックリスト</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>カテゴリ</th>
+                            <th>成果物</th>
+                            <th>受入基準</th>
+                            <th>確認方法</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3">①API/スキーマ合致</td>
+                            <td>OpenAPI仕様書</td>
+                            <td>全エンドポイント定義済み</td>
+                            <td>Swagger UI確認</td>
+                        </tr>
+                        <tr>
+                            <td>DDL（CREATE TABLE文）</td>
+                            <td>本文書記載の全テーブル/制約</td>
+                            <td>本番環境で実行確認</td>
+                        </tr>
+                        <tr>
+                            <td>Postmanコレクション</td>
+                            <td>全API動作確認可能</td>
+                            <td>E2Eテスト実行</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">②機能全般UAT</td>
+                            <td>炭素計算機能</td>
+                            <td>100圃場で正常動作</td>
+                            <td>本番相当データで検証</td>
+                        </tr>
+                        <tr>
+                            <td>信用評価機能</td>
+                            <td>評価結果の妥当性確認</td>
+                            <td>サンプル10件手動検証</td>
+                        </tr>
+                        <tr>
+                            <td>投資家ポータル表示</td>
+                            <td>全項目正常表示</td>
+                            <td>画面キャプチャ確認</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">③DDL/移行/ロールバック</td>
+                            <td>マイグレーションスクリプト</td>
+                            <td>冪等性確保、実行時間30分以内</td>
+                            <td>ステージング環境実行</td>
+                        </tr>
+                        <tr>
+                            <td>ロールバック手順書</td>
+                            <td>10分以内で戻せる</td>
+                            <td>訓練実施</td>
+                        </tr>
+                        <tr>
+                            <td>データ整合性チェック</td>
+                            <td>移行前後で不整合ゼロ</td>
+                            <td>SQLで件数確認</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">④監視・Runbook</td>
+                            <td>CloudWatchダッシュボード</td>
+                            <td>全メトリクス可視化</td>
+                            <td>画面確認</td>
+                        </tr>
+                        <tr>
+                            <td>アラート設定</td>
+                            <td>本文書記載の全項目</td>
+                            <td>テストアラート発火</td>
+                        </tr>
+                        <tr>
+                            <td>⑤試験完了レポート</td>
+                            <td>テスト結果エビデンス</td>
+                            <td>カバレッジ80%以上</td>
+                            <td>レポート査読</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>8.2 <span style="color: red; font-weight: bold;">要検討：</span>性能試験基準</h3>
+                <ul>
+                    <li><strong>負荷試験：</strong>想定TPSの2倍で1時間稼働</li>
+                    <li><strong>耐久試験：</strong>通常負荷で24時間連続稼働</li>
+                    <li><strong>スパイク試験：</strong>瞬間的に10倍負荷</li>
+                    <li><strong>合格基準：</strong>エラー率1%未満、メモリリークなし</li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>9. データ移行・バックフィル</h2>
+                
+                <h3>9.1 <span style="color: red; font-weight: bold;">要検討：</span>初期データ移行</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>対象データ</th>
+                            <th>移行元</th>
+                            <th>件数見込み</th>
+                            <th>実行タイミング</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>既存圃場データ</td>
+                            <td>farm_fields（既存）</td>
+                            <td>約1,000件</td>
+                            <td>本番リリース前</td>
+                        </tr>
+                        <tr>
+                            <td>過去作業記録</td>
+                            <td>farmwork_log系（過去1年分）</td>
+                            <td>約50,000件</td>
+                            <td>本番リリース後1週間</td>
+                        </tr>
+                        <tr>
+                            <td>土壌初期データ</td>
+                            <td>農研機構API</td>
+                            <td>圃場数×1件</td>
+                            <td>本番リリース後</td>
+                        </tr>
+                        <tr>
+                            <td>気象履歴データ</td>
+                            <td>気象庁API（過去1年）</td>
+                            <td>圃場数×365件</td>
+                            <td>本番リリース後2週間</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>9.2 <span style="color: red; font-weight: bold;">要検討：</span>バックフィル計画</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>処理内容</th>
+                            <th>対象期間</th>
+                            <th>実行窓</th>
+                            <th>所要時間</th>
+                            <th>リトライ方針</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>炭素計算（過去分）</td>
+                            <td>過去1年分</td>
+                            <td>深夜2-6時</td>
+                            <td>4時間×5日</td>
+                            <td>圃場単位で再実行可能</td>
+                        </tr>
+                        <tr>
+                            <td>信用評価（初回）</td>
+                            <td>最新データのみ</td>
+                            <td>任意</td>
+                            <td>2時間</td>
+                            <td>全件再実行可能</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>9.3 <span style="color: red; font-weight: bold;">要検討：</span>冪等性とエラー処理</h3>
+                <ul>
+                    <li><strong>冪等性確保：</strong>calculation_date、assessment_dateでUNIQUE制約</li>
+                    <li><strong>再実行単位：</strong>圃場ID単位で部分実行可能</li>
+                    <li><strong>チェックポイント：</strong>100件ごとに進捗をDynamoDBに記録</li>
+                    <li><strong>エラー時動作：</strong>3回リトライ後、DLQに格納し手動対応</li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>10. スケジュール/マイルストーン</h2>
+                
+                <h3>10.1 <span style="color: red; font-weight: bold;">要検討：</span>開発フェーズと成果物</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>フェーズ</th>
+                            <th>期間</th>
+                            <th>主要成果物</th>
+                            <th>受入基準</th>
+                            <th>判定会議</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. 基本設計</strong></td>
+                            <td>2週間</td>
+                            <td>・詳細設計書<br/>・API仕様書<br/>・ER図（最終版）</td>
+                            <td>・全ステークホルダー承認<br/>・技術検証完了</td>
+                            <td>設計レビュー会</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. 開発・単体テスト</strong></td>
+                            <td>4週間</td>
+                            <td>・ソースコード<br/>・単体テスト<br/>・API Mock</td>
+                            <td>・コードカバレッジ80%<br/>・静的解析パス</td>
+                            <td>コードレビュー会</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. 結合テスト</strong></td>
+                            <td>2週間</td>
+                            <td>・結合テスト仕様書<br/>・テスト結果<br/>・不具合一覧</td>
+                            <td>・全API疎通確認<br/>・重大不具合ゼロ</td>
+                            <td>品質判定会</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. 性能テスト</strong></td>
+                            <td>1週間</td>
+                            <td>・性能テスト結果<br/>・チューニング内容<br/>・負荷試験レポート</td>
+                            <td>・SLO全項目達成<br/>・ボトルネック解消</td>
+                            <td>性能判定会</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. UAT</strong></td>
+                            <td>2週間</td>
+                            <td>・UAT結果<br/>・運用手順書<br/>・教育資料</td>
+                            <td>・ユーザー承認<br/>・運用準備完了</td>
+                            <td>受入判定会</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6. 本番リリース</strong></td>
+                            <td>1週間</td>
+                            <td>・リリース手順書<br/>・切り戻し手順<br/>・監視設定</td>
+                            <td>・本番動作確認<br/>・監視正常</td>
+                            <td>Go/NoGo判定</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>10.2 <span style="color: red; font-weight: bold;">要検討：</span>重要マイルストーン</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>マイルストーン</th>
+                            <th>予定日</th>
+                            <th>達成条件</th>
+                            <th>リスク</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>キックオフ</td>
+                            <td style="color: red;">TBD</td>
+                            <td>体制確立、環境準備</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>設計完了</td>
+                            <td style="color: red;">キックオフ＋2週</td>
+                            <td>設計書承認</td>
+                            <td>外部API仕様変更</td>
+                        </tr>
+                        <tr>
+                            <td>開発完了</td>
+                            <td style="color: red;">キックオフ＋6週</td>
+                            <td>全機能実装完了</td>
+                            <td>技術課題の発生</td>
+                        </tr>
+                        <tr>
+                            <td>テスト完了</td>
+                            <td style="color: red;">キックオフ＋9週</td>
+                            <td>品質基準達成</td>
+                            <td>重大不具合の発見</td>
+                        </tr>
+                        <tr>
+                            <td>本番リリース</td>
+                            <td style="color: red;">キックオフ＋12週</td>
+                            <td>本番稼働開始</td>
+                            <td>データ移行トラブル</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>10.3 <span style="color: red; font-weight: bold;">要検討：</span>体制</h3>
+                <ul>
+                    <li><strong>発注者：</strong>プロダクトオーナー、技術リード各1名</li>
+                    <li><strong>ベンダー：</strong>PM 1名、開発者3-4名、テスター1名（想定）</li>
+                    <li><strong>定例会議：</strong>週次進捗会、随時技術検討会</li>
+                    <li><strong>コミュニケーション：</strong>Slack（日次）、Jira（課題管理）</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mermaid初期化
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                fontSize: 16,
+                themeVariables: {
+                    primaryColor: '#f8f9fa',
+                    primaryTextColor: '#333',
+                    primaryBorderColor: '#dee2e6',
+                    lineColor: '#666',
+                    secondaryColor: '#e3f2fd',
+                    tertiaryColor: '#fff3e0',
+                    fontFamily: 'Arial, sans-serif',
+                    fontSize: '16px'
+                },
+                sequence: {
+                    actorMargin: 50,
+                    showSequenceNumbers: true,
+                    messageMargin: 35,
+                    boxMargin: 10,
+                    boxTextMargin: 5,
+                    noteMargin: 10,
+                    actorFontSize: 14,
+                    noteFontSize: 12,
+                    messageFontSize: 14,
+                    arrowMarkerAbsolute: true
+                },
+                flowchart: {
+                    nodeSpacing: 50,
+                    rankSpacing: 50,
+                    curve: 'basis',
+                    padding: 15
+                },
+                er: {
+                    entityPadding: 15,
+                    stroke: '#333',
+                    fill: '#f8f9fa',
+                    fontSize: 12
+                }
+            });
+        });
+    </script>
+</body>
+</html>
